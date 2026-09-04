@@ -1,9 +1,12 @@
-import { pgTable, timestamp, text, numeric, serial } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, text, numeric, serial, boolean } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(), // pode usar UUID ou email
   name: text("name"),
   email: text("email").unique(),
+  password: text("password").notNull(),
+  is_logged_in: boolean("is_logged_in").default(false), // "true" | "false"
+  asigned_pending: boolean("asigned_pending").default(false), // "true" | "false"
   create_at: timestamp("created_at").defaultNow(),
 });
 

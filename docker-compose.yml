@@ -2,15 +2,28 @@ services:
   postgres:
     image: postgres:15
     container_name: wsfinances-postgres
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: wsfinances
+      POSTGRES_HOST: ${POSTGRES_HOST:-localhost}
+      POSTRES_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-wsfinances}
     ports:
       - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-wsfinances}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - wsfinances-net
+
+networks:
+  wsfinances-net:
+    driver: bridge
 
 volumes:
   postgres_data:
