@@ -141,7 +141,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   return res.json(toPublicUser(row));
 });
 
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/auth/login", async (req: Request, res: Response) => {
   const { email, password } = req.body as {
     email?: unknown;
     password?: unknown;
